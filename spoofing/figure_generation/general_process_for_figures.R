@@ -24,16 +24,16 @@ path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-i
 trade_path<-"\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-intermid-csv\\trade_log_new"
 file.names <- dir(path, pattern =".csv")
 
-# focus on certain part
 new_name<-character()
 for (item in file.names){
-  if (grepl("2016-07-01", item) & (grepl("fGC",item)) ) {
+  if (grepl("2016-07-05", item) & (grepl("fKC",item)) ) {
     new_name<-append(new_name,item)
   }
 }
 
 
 temp<-dir(trade_path, pattern =".csv")
+
 
 #file.names<-c('2016-07-11-bigCancel-lvl=1-n11.csv')
 
@@ -42,12 +42,13 @@ for (item in new_name){
   df<-new_list$df
   upper<-new_list$upper
   lower<-new_list$lower
+  future<-strsplit(item, split=".",fixed=TRUE)[[1]][1]
   if (item %in% temp){
     trade<- prepro_trade(paste(trade_path,"\\",item,sep=""))
     trade<-subset(trade,Price>=lower & Price<=upper)
-    n_depth_plot_dynamic_size(df,trade,paste(item,".png"),re,bl)
+    n_depth_plot_dynamic_size(df,trade,paste(item,".png"),re,bl,future)
   }else{
-    n_depth_plot_dynamic_size(df,data.frame(),paste(item,".png"),re,bl)
+    n_depth_plot_dynamic_size(df,data.frame(),paste(item,".png"),re,bl,future)
   }
   #break
   #  if (i==2){

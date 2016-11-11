@@ -6,7 +6,7 @@ library(RColorBrewer)
 library(readxl)
 library(grid)
 library(scales)
-
+library(lubridate)
 # Preprocessing part, currently support three files preprocess:
 # 1. n_depth csv
 # 2. four_size increase by algorithm
@@ -65,15 +65,25 @@ prepro_trade<-function(path){
 # 2. dynamicly change the range of depth
 #.3. Add trade data using triangle
 #.4. Change the theme and change the save size.
-n_depth_plot_dynamic_size<-function(df,trade=data.frame(),output=FALSE,re,bl){
+
+n_depth_plot_dynamic_size<-function(df,trade=data.frame(),output=FALSE,re,bl,future){
   range<- max(abs(df$depth_size))
   range<- range+(5-range%%5)
   level<-c(0.8,1.5,3,6)
-  #norm_size<-get_size(df)
+  
+  # based on different type of future, we apply different transform.
+  # Currently, we have 5 types of future: 'fCC', 'fCT', 'fGC', 'fKC', 'fSB'
+  # fCC      most seen diff: 1     norm_size*6
+  # fCT      most seen diff: 0.01     norm_size*600
+  # fGC gold most seen diff:0.1    norm_size*60
+  # fKC      most seen diff:0.05    norm_size*120
+  # fSB      most seen diff:0.01    norm_size*600
+  future_list<-list(fCC=6,fCT=600,fGC=60,fKC=120,fSB=600)
+  constant<-future_list[[future]]
   norm_size<-Mode(diff(unique(df$price)))
   
   figure<-ggplot(df,aes(x=Time,y=price))+
-  geom_segment(aes(x=Time,y=price,xend=Shift,yend=price,col=depth_size),size=norm_size*60,alpha=0.9)+
+  geom_segment(aes(x=Time,y=price,xend=Shift,yend=price,col=depth_size),size=norm_size*constant,alpha=0.9)+
   scale_colour_gradientn(colours=c(re,"white",bl),limits=c(-range,range))
 
   if(nrow(trade)!=0){
@@ -91,8 +101,8 @@ n_depth_plot_dynamic_size<-function(df,trade=data.frame(),output=FALSE,re,bl){
       theme(aspect.ratio=0.9)
     }
   if (output!=FALSE){
-    ggsave(filename=output,path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-figures-test",width=10,height=8)
-  }
+    ggsave(filename=output,path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-rotating-result\\output-rotating-figures",width=10,height=8)
+  }#
 }
 
 get_size<-function(df){
@@ -246,8 +256,15 @@ n_depth_plot_archive<-function(df,output=FALSE,re,bl){
 }
 
 
-# general function: get the mode
+# general functions 
+#get the mode
 Mode <- function(x) {
   ux <- unique(x)
   ux[which.max(tabulate(match(x, ux)))]
+}
+
+# extract date string and convert it into date type from the csv name
+extr_date<-function(item){
+  date_str=paste(strsplit(item, split="-",fixed=TRUE)[[1]][2:4],collapse="-")
+  ymd(date_str)
 }

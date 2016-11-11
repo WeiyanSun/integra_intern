@@ -25,13 +25,13 @@ t=time.time()
 print("start ",t)
 day_list=[]
 # change here
-path=r"\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-raw-sc"
+path=r"\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-raw-rotating"
 #get the list of all csv file in a directory 
 for filename in os.listdir(path):
 	day_list.append(filename)
 
 for day in day_list:
-	if (day!="2016-07-24") and (day!="2016-07-25") and (day!="2016-07-26") and (day!="2016-07-27") and (day!="2016-07-28") and (day!="2016-07-29") :
+	if (day=="2016-07-06") or (day=="2016-07-08") or (day=="2016-07-26") or (day=="2016-07-12") or (day=="2016-07-14") or (day=="2016-07-21") or (day=="2016-07-26"):
 		continue
 	new_path=path+"\\"+day
 	future_list=[]
@@ -39,7 +39,7 @@ for day in day_list:
 		future_list.append(filename)
 	for future in future_list:
 		#pdb.set_trace()
-		t=time.time()
+		#t=time.time()
 		hour_list=[]
 		last_path=new_path+"\\"+future
 		for filename in os.listdir(last_path):
@@ -47,13 +47,13 @@ for day in day_list:
 		hour_list=[x for x in hour_list if "markov" not in x]
 		hour_list=[x for x in hour_list if "summary" not in x]
 		excel_name=future+"-"+day
-		check_path="\\\\SERVER1\\\\Dropbox\\\\spoofing\\\\test-output\\\\spoof-candidates\\\\output-sc-excel\\\\"+day+"\\"+future
+		check_path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-rotating-result\\output-rotating-excel\\"+day+"\\"+future
 		output_path=check_path+"\\"+excel_name+".xlsx"
 		if not os.path.exists(check_path):
 			os.makedirs(check_path)
 		write_excel_one_day(last_path,output_path,hour_list)
-		elapsed=time.time()-t
-		print("finish ",future," use",elapsed," sec")
+		#elapsed=time.time()-t
+		#print("finish ",future," use",elapsed," sec")
 	print("finish ",day)
 # if current directory only contains one day
 # write_excel_one_day("\\INTEGRA-SERVER\\REC Projects\\Spoofing\\combine excel\\combine_gold_7_11.xlsx",dir_list)

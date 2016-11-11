@@ -69,7 +69,7 @@ def find_n_depth(a,output_path,n=10):
 
 #when we have several excels file to do at once.
 dir_list=[]
-path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-raw-sc"
+path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-raw-rotating"
 #get the list of all excel file in a directory 
 
 # filename is e.g 2016-07-11
@@ -77,6 +77,9 @@ for filename in os.listdir(path):
     dir_list.append(filename)
 #print(dir_list)
 for filename in dir_list: 
+    day=filename
+    if (day=="2016-07-06") or (day=="2016-07-08") or (day=="2016-07-26") or (day=="2016-07-12") or (day=="2016-07-14") or (day=="2016-07-21") or (day=="2016-07-26"):
+        continue
     next_path=path+"\\"+filename
     future_list=[]
     # future is fGC.Z17 like in a time folder
@@ -89,9 +92,9 @@ for filename in dir_list:
                 final_path=cur_path+"//"+gz
                 a= pd.read_csv(final_path,compression='gzip')
                 out_csv=".".join(gz.split(".")[0:-1])
-                out_path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-intermid-csv\\n_depth_new\\"+out_csv
+                out_path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-rotating-result\\output-rotating-intermid-csv\\n_depth\\"+out_csv
                 find_n_depth_new(a,out_path)
-            print("finish",gz)
+                print("finish",gz)
 
 
 # test

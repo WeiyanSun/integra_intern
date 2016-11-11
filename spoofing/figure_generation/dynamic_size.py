@@ -14,13 +14,17 @@ def dynamic_size(size,std,mean):
 		return 6
 
 
-path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-intermid-csv\\trade"
-path2="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-sc-intermid-csv\\trade_log"
+path="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-rotating-result\\output-rotating-intermid-csv\\trade"
+path2="\\\\SERVER1\\Dropbox\\spoofing\\test-output\\spoof-candidates\\output-rotating-result\\output-rotating-intermid-csv\\trade_log"
 
 dir_list=[]
 
 for filename in os.listdir(path):
-	dir_list.append(filename)
+	#if ("2016-07-04" in filename):
+		dir_list.append(filename)
+
+#pdb.set_trace()
+
 
 for file in dir_list:
 	cur_path=path+"\\"+file
